@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import proxyFetch from "./fetch";
 
 import { GEMINI_PROVIDER_ID, GEMINI_REDIRECT_URI } from "./constants";
 import {
@@ -72,26 +73,26 @@ export const GeminiCLIOAuthPlugin = async (
         apiKey: "",
         async fetch(input, init) {
           if (!isGenerativeLanguageRequest(input)) {
-            return fetch(input, init);
+            return proxyFetch(input, init);
           }
 
           const latestAuth = await getAuth();
           if (!isOAuthAuth(latestAuth)) {
-            return fetch(input, init);
+            return proxyFetch(input, init);
           }
 
           let authRecord = latestAuth;
           if (accessTokenExpired(authRecord)) {
             const refreshed = await refreshAccessToken(authRecord, client);
             if (!refreshed) {
-              return fetch(input, init);
+              return proxyFetch(input, init);
             }
             authRecord = refreshed;
           }
 
           const accessToken = authRecord.access;
           if (!accessToken) {
-            return fetch(input, init);
+            return proxyFetch(input, init);
           }
 
           /**
@@ -402,12 +403,12 @@ async function fetchWithRetry(input: RequestInfo, init: RequestInit | undefined)
   const maxDelayMs = DEFAULT_MAX_DELAY_MS;
 
   if (!canRetryRequest(init)) {
-    return fetch(input, init);
+    return proxyFetch(input, init);
   }
 
   let attempt = 0;
   while (true) {
-    const response = await fetch(input, init);
+    const response = await proxyFetch(input, init);
     if (!RETRYABLE_STATUS_CODES.has(response.status) || attempt >= maxRetries) {
       return response;
     }

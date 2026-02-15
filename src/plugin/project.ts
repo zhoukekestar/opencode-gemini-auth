@@ -10,6 +10,7 @@ import type {
   PluginClient,
   ProjectContextResult,
 } from "./types";
+import proxyFetch from '../fetch';
 
 const projectContextResultCache = new Map<string, ProjectContextResult>();
 const projectContextPendingCache = new Map<string, Promise<ProjectContextResult>>();
@@ -242,7 +243,7 @@ export async function loadManagedProject(
       projectId,
     });
 
-    const response = await fetch(url, {
+    const response = await proxyFetch(url, {
       method: "POST",
       headers,
       body: JSON.stringify(requestBody),
@@ -324,7 +325,7 @@ export async function onboardManagedProject(
       projectId,
     });
 
-    const response = await fetch(onboardUrl, {
+    const response = await proxyFetch(onboardUrl, {
       method: "POST",
       headers,
       body: JSON.stringify(requestBody),
@@ -356,7 +357,7 @@ export async function onboardManagedProject(
           streaming: false,
           projectId,
         });
-        const opResponse = await fetch(operationUrl, {
+        const opResponse = await proxyFetch(operationUrl, {
           method: "GET",
           headers,
         });
