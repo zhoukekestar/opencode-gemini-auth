@@ -193,7 +193,8 @@ async function refreshAccessTokenInternal(
     storeCachedAuth(updatedAuth);
     invalidateProjectContextCache(auth.refresh);
 
-    if (refreshedParts.refreshToken !== parts.refreshToken) {
+    // always store refreshtoken & accesstoken to opencode auth file
+    // if (refreshedParts.refreshToken !== parts.refreshToken) {
       try {
         await client.auth.set({
           path: { id: GEMINI_PROVIDER_ID },
@@ -202,7 +203,7 @@ async function refreshAccessTokenInternal(
       } catch (storeError) {
         console.error("Failed to persist refreshed Gemini OAuth credentials:", storeError);
       }
-    }
+    // }
 
     return updatedAuth;
   } catch (error) {
