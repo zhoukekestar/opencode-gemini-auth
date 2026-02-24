@@ -1,7 +1,7 @@
 {
   "name": "opencode-gemini-auth-proxy",
   "module": "index.ts",
-  "version": "1.3.10",
+  "version": "1.4.2",
   "author": "jenslys",
   "repository": "https://github.com/jenslys/opencode-gemini-auth",
   "files": [
@@ -10,14 +10,17 @@
   ],
   "license": "MIT",
   "type": "module",
+  "scripts": {
+    "update:gemini-cli": "git -C .local/gemini-cli pull --ff-only"
+  },
   "devDependencies": {
-    "@opencode-ai/plugin": "^1.1.48",
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@opencode-ai/plugin": "^1.2.10",
     "@openauthjs/openauth": "^0.4.3"
   }
 }
